@@ -4,24 +4,15 @@
 #' @importFrom dplyr tibble
 #' @importFrom stringr str_c
 #' @importFrom stringr str_remove_all
-#' @importFrom stringr str_replace_all
 #' @importFrom stringr str_glue
-#' @importFrom lubridate now
 #' @importFrom psych describe
-#' @import openxlsx
 
-## describe function
-
-describe <- function(data) {
+createDescTable <- function(data) {
   desc <- data |>
     dplyr::select(where(is.numeric)) |>
     psych::describe()
 
   desc$rownames <- base::rownames(desc)
-
-  maxChar <- desc$rownames |>
-    base::nchar() |>
-    base::max()
 
   desc <- desc |>
     dplyr::tibble() |>
@@ -55,7 +46,28 @@ describe <- function(data) {
       "\u6700\u5927\u5024" = max
     )
 
+  return(desc)
+}
 
+
+
+#' @importFrom stringr str_glue
+#' @importFrom stringr str_replace_all
+#' @importFrom lubridate now
+#' @importFrom openxlsx createWorkbook
+#' @importFrom openxlsx addWorksheet
+#' @importFrom openxlsx writeData
+#' @importFrom openxlsx deleteData
+#' @importFrom openxlsx createStyle
+#' @importFrom openxlsx setColWidths
+#' @importFrom openxlsx setRowHeights
+#' @importFrom openxlsx addStyle
+#' @importFrom openxlsx saveWorkbook
+
+createExcelFile <- function(desc) {
+  maxChar <- desc[['\u5909\u6570\u540d']] |>
+    base::nchar() |>
+    base::max()
   nrow <- desc |> base::nrow()
 
 
@@ -262,6 +274,18 @@ describe <- function(data) {
   openxlsx::saveWorkbook(wb = workBook,
                          file = fileName,
                          overwrite = TRUE)
-
 }
 
+
+#' \u8a18\u8ff0\u7d71\u8a08\u306e\u51fa\u529b
+#'
+#' \u8a18\u8ff0\u7d71\u8a08\u3092Excel\u30d5\u30a1\u30a4\u30eb\u5f62\u5f0f\u3067\u51fa\u529b\u3057\u307e\u3059\u3002
+#' @param data tibble, data.frame etc.
+#' @export
+#' @examples
+#' describe(iris)
+describe <- function(data){
+  data |>
+    createDescTable() |>
+    createExcelFile()
+}
