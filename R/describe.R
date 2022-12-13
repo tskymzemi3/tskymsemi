@@ -9,6 +9,7 @@
 #' @importFrom psych describe
 
 utils::globalVariables("where")
+utils::globalVariables(":=")
 
 createDescTable <- function(data) {
   desc <- data |>
@@ -53,12 +54,12 @@ createDescTable <- function(data) {
       )
     ) |>
     dplyr::rename(
-      varLabel = !!as.name("rownames"),
-      nLabel = !!as.name("n"),
-      meanLabel = !!as.name("mean"),
-      sdLabel = !!as.name("sd"),
-      minLabel = !!as.name("min"),
-      maxLabel = !!as.name("max")
+      !!varLabel := !!as.name("rownames"),
+      !!nLabel := !!as.name("n"),
+      !!meanLabel := !!as.name("mean"),
+      !!sdLabel := !!as.name("sd"),
+      !!minLabel := !!as.name("min"),
+      !!maxLabel := !!as.name("max")
     )
 
   return(desc)
