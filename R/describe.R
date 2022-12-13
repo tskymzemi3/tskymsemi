@@ -5,7 +5,10 @@
 #' @importFrom stringr str_c
 #' @importFrom stringr str_remove_all
 #' @importFrom stringr str_glue
+#' @importFrom stringi stri_enc_tonative
 #' @importFrom psych describe
+
+utils::globalVariables("where")
 
 createDescTable <- function(data) {
   desc <- data |>
@@ -14,41 +17,52 @@ createDescTable <- function(data) {
 
   desc$rownames <- base::rownames(desc)
 
+  varLabel <- "\u5909\u6570\u540d" |> stringi::stri_enc_tonative()
+  nLabel <- "\u89b3\u6e2c\u6570" |> stringi::stri_enc_tonative()
+  meanLabel <- "\u5e73\u5747\u5024" |> stringi::stri_enc_tonative()
+  sdLabel <- "\u6a19\u6e96\u504f\u5dee" |> stringi::stri_enc_tonative()
+  minLabel <- "\u6700\u5c0f\u5024" |> stringi::stri_enc_tonative()
+  maxLabel <- "\u6700\u5927\u5024" |> stringi::stri_enc_tonative()
+
   desc <- desc |>
     dplyr::tibble() |>
     dplyr::select(
-      rownames, n, mean, sd, min, max
+      !!as.name("rownames"),
+      !!as.name("n"),
+      !!as.name("mean"),
+      !!as.name("sd"),
+      !!as.name("min"),
+      !!as.name("max")
     ) |>
     dplyr::mutate(
       min = dplyr::if_else(
-        min %% 1 != 0,
-        base::round(min, digits = 4) |>
+        !!as.name("min") %% 1 != 0,
+        base::round(!!as.name("min"), digits = 4) |>
           base::format(nsmall = 4) |>
           stringr::str_c() |>
           stringr::str_remove_all(" "),
-        stringr::str_c(min)
+        stringr::str_c(!!as.name("min"))
       ),
       max = dplyr::if_else(
-        max %% 1 != 0,
-        base::round(max, digits = 4) |>
+        !!as.name("max") %% 1 != 0,
+        base::round(!!as.name("max"), digits = 4) |>
           base::format(nsmall = 4) |>
           stringr::str_c() |>
           stringr::str_remove_all(" "),
-        stringr::str_c(max)
+        stringr::str_c(!!as.name("max"))
       )
     ) |>
     dplyr::rename(
-      "\u5909\u6570\u540d" = rownames,
-      "\u89b3\u6e2c\u6570" = n,
-      "\u5e73\u5747\u5024" = mean,
-      "\u6a19\u6e96\u504f\u5dee" = sd,
-      "\u6700\u5c0f\u5024" = min,
-      "\u6700\u5927\u5024" = max
+      varLabel = !!as.name("rownames"),
+      nLabel = !!as.name("n"),
+      meanLabel = !!as.name("mean"),
+      sdLabel = !!as.name("sd"),
+      minLabel = !!as.name("min"),
+      maxLabel = !!as.name("max")
     )
 
   return(desc)
 }
-
 
 
 #' @importFrom stringr str_glue
@@ -277,13 +291,12 @@ createExcelFile <- function(desc) {
 }
 
 
-#' \u8a18\u8ff0\u7d71\u8a08\u306e\u51fa\u529b
+#' Output Descriptive Statistics
 #'
-#' \u8a18\u8ff0\u7d71\u8a08\u3092Excel\u30d5\u30a1\u30a4\u30eb\u5f62\u5f0f\u3067\u51fa\u529b\u3057\u307e\u3059\u3002
-#' @param data tibble, data.frame etc.
+#' Create a descriptive statistics table and write it to an Excel file (in Japanese).
+#' @param data data frame  e.g. tibble, data.frame etc.
 #' @export
-#' @examples
-#' describe(iris)
+
 describe <- function(data){
   data |>
     createDescTable() |>

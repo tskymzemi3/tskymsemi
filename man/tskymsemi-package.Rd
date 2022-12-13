@@ -6,10 +6,10 @@
 \alias{tskymsemi-package}
 \title{tskymsemi: Convenient functions for Tsukiyama Seminar}
 \description{
-This package includes convenient functions for Tsukiyama Seminar. e.g. Creating a descriptive statistics table.
+This package includes convenient functions for Tsukiyama Seminar. e.g. Creating Descriptive Statistics Table.
 }
 \author{
-\strong{Maintainer}: First Last \email{0122atk@gmail.com}
+\strong{Maintainer}: Takumi KATO \email{0122atk@gmail.com}
 
 }
 \keyword{internal}

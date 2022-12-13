@@ -2,16 +2,13 @@
 % Please edit documentation in R/describe.R
 \name{describe}
 \alias{describe}
-\title{\u8a18\u8ff0\u7d71\u8a08\u306e\u51fa\u529b}
+\title{Output Descriptive Statistics}
 \usage{
 describe(data)
 }
 \arguments{
-\item{data}{tibble, data.frame etc.}
+\item{data}{data frame  e.g. tibble, data.frame etc.}
 }
 \description{
-\u8a18\u8ff0\u7d71\u8a08\u3092Excel\u30d5\u30a1\u30a4\u30eb\u5f62\u5f0f\u3067\u51fa\u529b\u3057\u307e\u3059\u3002
-}
-\examples{
-describe(iris)
+Create a descriptive statistics table and write it to an Excel file (in Japanese).
 }
