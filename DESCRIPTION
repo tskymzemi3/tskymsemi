@@ -1,0 +1,12 @@
+Package: tskymsemi
+Title: Convenient functions for Tsukiyama Seminar
+Version: 0.0.0.9000
+Authors@R: 
+    person("First", "Last", , "0122atk@gmail.com", role = c("aut", "cre"))
+Description: This package includes convenient functions for Tsukiyama Seminar.
+    e.g. Creating a descriptive statistics table.
+License: MIT + file LICENSE
+Imports: dplyr, stringr, lubridate, psych, openxlsx
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
