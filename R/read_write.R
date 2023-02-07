@@ -4,7 +4,9 @@
 #' @param file A path to a file.
 #' @param skip Number of lines to skip before reading data.
 #' @param na Character vector of strings to interpret as missing values.
+#' @param sheet Sheet to read. Either a string (the name of a sheet), or an integer (the position of the sheet).
 #' @export
+#' @importFrom readr locale
 #' @importFrom readr read_csv
 #' @importFrom readr read_tsv
 #' @importFrom readr read_rds
@@ -16,57 +18,80 @@
 #' @importFrom haven read_stata
 #' @importFrom haven read_sas
 
-read <- function (file, skip = 0, na = c("", "NA"))
-{
-  encoding_res <- readr::guess_encoding(file)[[1]][1] |> as.character()
+read <-
+  function (file,
+            skip = 0,
+            na = c("", "NA"),
+            sheet = 1)
+  {
+    encoding_res <-
+      readr::guess_encoding(file)[[1]][1] |> as.character()
 
-  if (grepl("(?i)\\.csv$", file)) {
-    file <-
-      readr::read_csv(
+    if (grepl("(?i)\\.csv$", file)) {
+      file <-
+        readr::read_csv(
+          file,
+          locale = readr::locale(encoding = encoding_res),
+          skip = skip,
+          na = na
+        )
+    }
+    else if (grepl("(?i)\\.tsv$", file)) {
+      file <-
+        readr::read_tsv(
+          file,
+          locale = readr::locale(encoding = encoding_res),
+          skip = skip,
+          na = na
+        )
+    }
+    else if (grepl("(?i)((\\.xlsx$)|(\\.xls$))", file)) {
+      file <-
+        readxl::read_excel(
+          file,
+          sheet = sheet,
+          na = na,
+          skip = skip
+        )
+    }
+    else if (grepl("(?i)\\.parquet$", file)) {
+      file <-
+        arrow::read_parquet(file)
+    }
+    else if (grepl("(?i)\\.feather$", file)) {
+      file <-
+        arrow::read_feather(file)
+    }
+    else if (grepl("(?i)\\.rds$", file)) {
+      file <- readr::read_rds(file)
+    }
+    else if (grepl("(?i)\\.fst$", file)) {
+      file <-
+        fst::read_fst(file)
+    }
+    else if (grepl("(?i)((\\.sav$)|(\\.por$))", file)) {
+      file <- haven::read_spss(
         file,
-        locale = readr::locale(encoding = encoding_res),
-        skip = skip,
-        na = na
+        skip = skip
       )
-  }
-  else if (grepl("(?i)\\.tsv$", file)) {
-    file <-
-      readr::read_tsv(
+    }
+    else if (grepl("(?i)\\.dta$", file)) {
+      file <- haven::read_stata(
         file,
-        locale = readr::locale(encoding = encoding_res),
-        skip = skip,
-        na = na
+        skip = skip
       )
+    }
+    else if (grepl("(?i)((\\.sas7bdat$)|(\\.sas7bcat$))", file)) {
+      file <- haven::read_sas(
+        file,
+        skip = skip
+      )
+    }
+    else if (!file.exists(file)) {
+      stop("No such file")
+    }
+    return(file)
   }
-  else if (grepl("(?i)((\\.xlsx$)|(\\.xls$))", file)) {
-    file <- readxl::read_excel(file, skip = skip, na = na)
-  }
-  else if (grepl("(?i)\\.parquet$", file)) {
-    file <- arrow::read_parquet(file)
-  }
-  else if (grepl("(?i)\\.feather$", file)) {
-    file <- arrow::read_feather(file)
-  }
-  else if (grepl("(?i)\\.rds$", file)) {
-    file <- readr::read_rds(file)
-  }
-  else if (grepl("(?i)\\.fst$", file)) {
-    file <- fst::read_fst(file)
-  }
-  else if (grepl("(?i)((\\.sav$)|(\\.por$))", file)) {
-    file <- haven::read_spss(file, skip = skip)
-  }
-  else if (grepl("(?i)\\.dta$", file)) {
-    file <- haven::read_stata(file, skip = skip)
-  }
-  else if (grepl("(?i)((\\.sas7bdat$)|(\\.sas7bcat$))", file)) {
-    file <- haven::read_sas(file, skip = skip)
-  }
-  else if (!file.exists(file)) {
-    stop("No such file")
-  }
-  return(file)
-}
 
 
 #' Write a file

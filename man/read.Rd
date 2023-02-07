@@ -4,7 +4,7 @@
 \alias{read}
 \title{Read a file}
 \usage{
-read(file, skip = 0, na = c("", "NA"))
+read(file, skip = 0, na = c("", "NA"), sheet = 1)
 }
 \arguments{
 \item{file}{A path to a file.}
@@ -12,6 +12,8 @@ read(file, skip = 0, na = c("", "NA"))
 \item{skip}{Number of lines to skip before reading data.}
 
 \item{na}{Character vector of strings to interpret as missing values.}
+
+\item{sheet}{Sheet to read. Either a string (the name of a sheet), or an integer (the position of the sheet).}
 }
 \description{
 Read a dataset file.
