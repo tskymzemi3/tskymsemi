@@ -4,7 +4,7 @@
 \alias{read}
 \title{Read a file}
 \usage{
-read(file, skip = 0, na = "")
+read(file, skip = 0, na = c("", "NA"))
 }
 \arguments{
 \item{file}{A path to a file.}

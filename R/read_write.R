@@ -16,7 +16,7 @@
 #' @importFrom haven read_stata
 #' @importFrom haven read_sas
 
-read <- function (file, skip = 0, na = "")
+read <- function (file, skip = 0, na = c("", "NA"))
 {
   encoding_res <- readr::guess_encoding(file)[[1]][1] |> as.character()
 
