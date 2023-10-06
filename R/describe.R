@@ -79,7 +79,8 @@ createDescTable <- function(data) {
 #' @importFrom openxlsx addStyle
 #' @importFrom openxlsx saveWorkbook
 
-createExcelFile <- function(desc) {
+createExcelFile <- function(desc, file_name = "default") {
+
   maxChar <- desc[['\u5909\u6570\u540d']] |>
     base::nchar() |>
     base::max()
@@ -279,12 +280,16 @@ createExcelFile <- function(desc) {
     heights = 4.5
   )
 
-  fileName <-
-    stringr::str_glue("\u8a18\u8ff0\u7d71\u8a08_{lubridate::now()}.xlsx") |>
-    stringr::str_replace_all(pattern = "(-|:)",
-                             replacement = "") |>
-    stringr::str_replace_all(pattern = " ",
-                             replacement = "_")
+  if(file_name == "default"){
+    fileName <-
+      stringr::str_glue("\u8a18\u8ff0\u7d71\u8a08_{lubridate::now()}.xlsx") |>
+      stringr::str_replace_all(pattern = "(-|:)",
+                               replacement = "") |>
+      stringr::str_replace_all(pattern = " ",
+                               replacement = "_")
+  } else {
+    fileName <- file_name
+  }
 
   openxlsx::saveWorkbook(wb = workBook,
                          file = fileName,
@@ -296,10 +301,11 @@ createExcelFile <- function(desc) {
 #'
 #' Create a descriptive statistics table and write it to an Excel file (in Japanese).
 #' @param data data frame  e.g. tibble, data.frame etc.
+#' @param file_name file name (optional)
 #' @export
 
-describe <- function(data){
+describe <- function(data, file_name = "default"){
   data |>
     createDescTable() |>
-    createExcelFile()
+    createExcelFile(file_name)
 }

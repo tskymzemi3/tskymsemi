@@ -4,10 +4,12 @@
 \alias{describe}
 \title{Output Descriptive Statistics}
 \usage{
-describe(data)
+describe(data, file_name = "default")
 }
 \arguments{
 \item{data}{data frame  e.g. tibble, data.frame etc.}
+
+\item{file_name}{file name (optional)}
 }
 \description{
 Create a descriptive statistics table and write it to an Excel file (in Japanese).
