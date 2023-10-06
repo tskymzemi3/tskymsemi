@@ -1,6 +1,6 @@
 Package: tskymsemi
 Title: Convenient functions for Tsukiyama Seminar
-Version: 0.0.1.6
+Version: 0.0.1.7
 Authors@R: 
     person("Takumi", "KATO", , "0122atk@gmail.com", role = c("aut", "cre"))
 Description: This package includes convenient functions for Tsukiyama Seminar.

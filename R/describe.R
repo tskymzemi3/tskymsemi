@@ -288,6 +288,8 @@ createExcelFile <- function(desc, file_name = "default") {
       stringr::str_replace_all(pattern = " ",
                                replacement = "_")
   } else {
+    file_name <- file_name |>
+      stringr::str_replace_all(pattern = ".xlsx", replacement = "")
     fileName <- paste0(file_name, ".xlsx")
   }
 
