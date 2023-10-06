@@ -288,7 +288,7 @@ createExcelFile <- function(desc, file_name = "default") {
       stringr::str_replace_all(pattern = " ",
                                replacement = "_")
   } else {
-    fileName <- file_name
+    fileName <- paste0(file_name, ".xlsx")
   }
 
   openxlsx::saveWorkbook(wb = workBook,
